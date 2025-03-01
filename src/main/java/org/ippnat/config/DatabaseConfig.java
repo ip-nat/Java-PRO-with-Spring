@@ -24,7 +24,6 @@ public class DatabaseConfig {
         hikariConfig.setUsername(databaseProperties.getUsername());
         hikariConfig.setPassword(databaseProperties.getPassword());
         hikariConfig.setDriverClassName(databaseProperties.getDriverClassName());
-
         hikariConfig.setConnectionTimeout(databaseProperties.getConnectionTimeout());
         hikariConfig.setMinimumIdle(databaseProperties.getMinimumIdle());
         hikariConfig.setMaximumPoolSize(databaseProperties.getMaximumPoolSize());
