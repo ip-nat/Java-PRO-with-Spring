@@ -33,7 +33,7 @@ public class Application {
                     .map(User::getId)
                     .toList();
             Long randomUserId = userIds.get(random.nextInt(userIds.size()));
-            userService.getUserById(randomUserId);
+            System.out.println("Найден пользователь: " + userService.getUserById(randomUserId));
             userService.deleteUser(randomUserId);
         } catch (UserNotFoundException e) {
             System.out.println(e.getMessage());
