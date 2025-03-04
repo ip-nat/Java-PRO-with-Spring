@@ -5,10 +5,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.ippnat.config.properties.DatabaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class DatabaseConfig {
 
     private final DatabaseProperties databaseProperties;
