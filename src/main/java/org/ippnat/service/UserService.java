@@ -1,50 +1,83 @@
 package org.ippnat.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ippnat.entity.User;
 import org.ippnat.exception.UserNotFoundException;
-import org.ippnat.repository.UserDao;
+import org.ippnat.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
+@Slf4j
 @Service
-public class UserService {
+@RequiredArgsConstructor
+public class UserService implements CommandLineRunner {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
+    private static final List<String> names = Arrays.asList(
+            "Adam", "Eva", "Petr", "Alice", "Max", "Anna", "Kate", "Sophia", "Pavel", "Natalie"
+    );
+    private static final Random random = new Random();
 
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
+    @Override
+    public void run(String... args) {
+        for (int i = 0; i < 10; i++) {
+            createUser(names.get(i));
+        }
+        List<Long> userIds = getAllUsers()
+                .stream()
+                .map(User::getId)
+                .toList();
+        Long randomUserId = userIds.get(random.nextInt(userIds.size()));
+        log.info("Найден пользователь: {}", getUserById(randomUserId));
+        deleteUser(randomUserId);
     }
 
-    public void createUser(String username) {
-        System.out.println("Создание пользователя с username=" + username);
-        userDao.create(username);
-        System.out.println("Пользователь username=" + username + " успешно создан");
-    }
-
-    public void deleteUser(Long id) {
-        System.out.println("Удаление пользователя по ID=" + id);
-        if (userDao.get(id).isPresent()) {
-            userDao.delete(id);
-            System.out.println("Пользователь успешно удален");
-        } else {
-            System.out.println("Пользователь с ID=" + id + " не найден");
+    public User createUser(String username) {
+        log.info("Создание пользователя с username={}", username);
+        try {
+            return userRepository.findByUsername(username)
+                    .map(user -> {
+                        log.info("Пользователь с таким именем уже существует: {}", user);
+                        return user;
+                    })
+                    .orElseGet(() -> {
+                        User user = new User(username);
+                        user = userRepository.save(user);
+                        log.info("Пользователь username={} успешно создан", username);
+                        return user;
+                    });
+        } catch (Exception e) {
+            log.error("Ошибка при создании пользователя username={}", username, e);
+            throw new RuntimeException("Ошибка при создании пользователя", e);
         }
     }
 
+    public void deleteUser(Long id) {
+        log.info("Удаление пользователя по ID={}", id);
+        userRepository.deleteById(id);
+        log.info("Пользователь успешно удален");
+    }
+
     public User getUserById(Long id) {
-        System.out.println("Получение пользователя с ID=" + id);
-        return userDao.get(id).orElseThrow(()
+        log.info("Получение пользователя с ID={}", id);
+        return userRepository.findById(id).orElseThrow(()
                 -> new UserNotFoundException("Пользователь с ID=" + id + " не найден"));
     }
 
     public List<User> getAllUsers() {
-        System.out.println("Получение всех пользователей");
-        List<User> user = userDao.getAll();
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("Пользователи не найдены");
+        log.info("Получение всех пользователей");
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            log.error("Пользователи не найдены");
+            return users;
         }
-        System.out.println("Количество найденных пользователей " + user.size() + " :" + user);
-        return user;
+        log.info("Количество найденных пользователей {} :{}", users.size(), users);
+        return users;
     }
+
 }

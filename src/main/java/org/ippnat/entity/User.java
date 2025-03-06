@@ -1,22 +1,33 @@
 package org.ippnat.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "users")
 public class User {
 
-    private final Long id;
-    private final String username;
+    public User() {}
 
-    public User(Long id, String username) {
-        this.id = id;
+    public User(String username) {
         this.username = username;
     }
 
-    public Long getId() {
-        return id;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    public String getUsername() {
-        return username;
-    }
+    @Column(name = "username")
+    private String username;
 
     @Override
     public String toString() {
@@ -25,4 +36,5 @@ public class User {
                 ", username='" + username + '\'' +
                 '}';
     }
+
 }

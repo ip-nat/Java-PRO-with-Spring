@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables
+      author: ipp_nat
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/00_create_schema.sql
+            splitStatements: true
+            stripComments: true
+
+  - include:
+      file: db/changelog/changes/01_insert_initial_data.sql
