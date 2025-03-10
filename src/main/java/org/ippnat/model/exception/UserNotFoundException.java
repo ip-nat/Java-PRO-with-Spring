@@ -1,4 +1,4 @@
-package org.ippnat.exception;
+package org.ippnat.model.exception;
 
 public class UserNotFoundException extends RuntimeException {
 
