@@ -9,6 +9,7 @@ import org.ippnat.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -25,19 +26,22 @@ public class ProductService implements CommandLineRunner  {
         log.info("Получение продукта по ID={}", id);
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("Продукт с ID=" + id + " не найден"));
-        return new ProductResponse(product);
+
+        return new ProductResponse(product.getId(), product.getAccountId(), product.getType(), product.getBalance());
     }
 
     public List<ProductResponse> getUserProducts(Long userId) {
         log.info("Получение всех продуктов пользователя с ID={}", userId);
         List<Product> products = productRepository.findAllByUserId(userId);
+
         if (products.isEmpty()) {
-            log.error("Продукты не найдены");
-            return List.of();
+            log.warn("Продукты не найдены для пользователя с ID={}", userId);
+            return Collections.emptyList();
         }
+
         log.info("Количество найденных продуктов {} :{}", products.size(), products);
         return products.stream()
-                .map(ProductResponse::new)
+                .map(product -> new ProductResponse(product.getId(), product.getAccountId(), product.getType(), product.getBalance()))
                 .collect(Collectors.toList());
     }
 
