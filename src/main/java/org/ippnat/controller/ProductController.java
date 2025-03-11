@@ -1,4 +1,4 @@
-package org.ippnat.resource;
+package org.ippnat.controller;
 
 import org.ippnat.model.dto.ProductResponse;
 import org.ippnat.service.ProductService;
@@ -15,11 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
-public class ProductResource {
+public class ProductController {
 
     private final ProductService service;
 
-    public ProductResource(ProductService service) {
+    public ProductController(ProductService service) {
         this.service = service;
     }
 
