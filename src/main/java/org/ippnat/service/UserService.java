@@ -3,7 +3,7 @@ package org.ippnat.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ippnat.entity.User;
-import org.ippnat.exception.UserNotFoundException;
+import org.ippnat.model.exception.UserNotFoundException;
 import org.ippnat.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
