@@ -1,0 +1,15 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /payment-core
+
+spring:
+  application:
+    name: payment-core-service
+
+integration:
+  clients:
+    products-service:
+      url: "http://localhost:8081/client-products/api/v1/products"
+      connect-timeout: 3s
+      read-timeout: 10s
