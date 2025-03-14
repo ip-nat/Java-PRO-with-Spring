@@ -1,7 +1,0 @@
-CREATE SCHEMA IF NOT EXISTS users;
-
-CREATE TABLE IF NOT EXISTS users
-(
-    id       BIGSERIAL PRIMARY KEY,
-    username VARCHAR(255) unique
-);
