@@ -1,5 +1,6 @@
 package org.ippnat.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ippnat.model.dto.ErrorResponseDto;
 import org.ippnat.model.exception.InsufficientBalanceException;
 import org.ippnat.model.exception.ProductNotFoundException;
@@ -14,6 +15,7 @@ import static org.ippnat.model.dto.ErrorCodeEnum.INTERNAL_ERROR;
 import static org.ippnat.model.dto.ErrorCodeEnum.PRODUCT_NOT_FOUND;
 import static org.ippnat.model.dto.ErrorCodeEnum.USER_NOT_FOUND;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -32,11 +34,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException ex) {
         ErrorResponseDto error = new ErrorResponseDto(USER_NOT_FOUND, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGenericException(Exception ex) {
+        log.error("Произошла ошибка: ", ex);
         ErrorResponseDto error = new ErrorResponseDto(INTERNAL_ERROR, "Something went wrong");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
