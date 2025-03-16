@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: create-tables
-      author: ipp_nat
+      author: ip_nat
       changes:
         - sqlFile:
             path: db/changelog/changes/00_create_schema.sql
